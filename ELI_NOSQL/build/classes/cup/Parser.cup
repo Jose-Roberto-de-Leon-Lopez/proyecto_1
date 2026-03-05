@@ -1,0 +1,38 @@
+package analisis;
+
+import java_cup.runtime.*;
+import eli_nosql.ast.*;
+
+parser code {:
+    public void syntax_error(Symbol s) {
+        System.err.println("Error sintáctico en línea: " + s.left);
+    }
+:}
+
+/* Terminales */
+terminal EOF, error;
+terminal DATABASE, IDENTIFICADOR, PUNTOCOMA, LLAVE_IZQ, LLAVE_DER;
+terminal STOREAT, CADENA;
+
+/* No terminales */
+nonterminal Programa programa;
+nonterminal Instruccion instruccion;
+
+/* Inicio */
+programa ::= instruccion:i
+    {: 
+        Programa p = new Programa(0,0);
+        p.addInstruccion(i);
+        RESULT = p;
+    :}
+    ;
+
+/* Database */
+instruccion ::= DATABASE IDENTIFICADOR:nombre LLAVE_IZQ STOREAT CADENA:ruta PUNTOCOMA LLAVE_DER
+    {: 
+        Instruccion inst = new Instruccion(nombre.left, nombre.right, "database");
+        inst.setNombre(nombre);
+        inst.setRuta(ruta);
+        RESULT = inst;
+    :}
+    ;

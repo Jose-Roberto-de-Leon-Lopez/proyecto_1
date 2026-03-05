@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ELI_NOSQL" default="default" basedir=".">
+    <description>ELI-NOSQL Compiler Project</description>
+    <import file="nbproject/build-impl.xml"/>
+    
+    <property name="cup" location="src/cup"/>
+    <property name="jflex" location="src/jflex"/>
+    <property name="java" location="src"/>
+    <property name="classes" location="bin"/>
+    <property name="lib" location="lib"/>
+    <property name="tools" location="tools"/>
+    
+    <taskdef name="jflex" classname="jflex.anttask.JFlexTask">
+        <classpath>
+            <pathelement location="${tools}/jflex-full-1.9.1.jar"/>
+        </classpath>
+    </taskdef>
+    
+    <taskdef name="cup" classname="java_cup.anttask.CUPTask">
+        <classpath>
+            <pathelement location="${tools}/java-cup-11b.jar"/>
+        </classpath>
+    </taskdef>
+
+    <target name="generate">
+        <echo message="Generando Lexer desde JFlex..."/>
+        <jflex file="${jflex}/Scanner.jflex" destdir="${java}"/>
+    </target>
+
+    <target name="compile" depends="generate">
+        <mkdir dir="${classes}"/>
+        <javac srcdir="${java}" destdir="${classes}" debug="true" 
+               debuglevel="lines,vars,source" includeantruntime="false"
+               encoding="UTF-8">
+            <classpath>
+                <pathelement location="${lib}/java-cup-11b-runtime.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="clean">
+        <delete file="${java}/analisis/Lexer.java" failonerror="false"/>
+        <delete file="${java}/analisis/Parser.java" failonerror="false"/>
+        <delete file="${java}/analisis/sym.java" failonerror="false"/>
+        <delete dir="${classes}" failonerror="false"/>
+    </target>
+    
+    <target name="run" depends="compile">
+        <java classname="eli_nosql.ELI_NOSQL" fork="true">
+            <classpath>
+                <pathelement location="${lib}/java-cup-11b-runtime.jar"/>
+                <pathelement location="${classes}"/>
+            </classpath>
+        </java>
+    </target>
+</project>

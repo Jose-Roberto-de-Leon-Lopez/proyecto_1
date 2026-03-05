@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.14
+Created-By: 25.0.2+10-LTS-69 (Oracle Corporation)
+X-COMMENT: Main-Class will be added automatically by build
+Main-Class: eli_nosql.ELI_NOSQL
+
